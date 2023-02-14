@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.5'
+    id "io.spring.dependency-management" version "1.1.0"
+}
+
+group 'ru.hse.glassofwater'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    // Spring boot starter
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Lombok
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+
+    // Postgre
+    implementation 'org.postgresql:postgresql'
+}
+
+test {
+    useJUnitPlatform()
+}
