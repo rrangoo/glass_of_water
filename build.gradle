@@ -11,6 +11,12 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    manifest {
+        attributes "Main-Class": "ru.hse.glassofwater.GowApplication"
+    }
+}
+
 dependencies {
     // Testing
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
