@@ -16,6 +16,7 @@ jar {
         attributes "Main-Class": "ru.hse.glassofwater.GowApplication"
     }
 
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
