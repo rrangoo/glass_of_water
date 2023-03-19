@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  glassofwaterdb:
+    image: 'postgres:latest'
+    container_name: 'glassofwaterdb'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      - 'POSTGRES_PASSWORD=glassofwaterpassword'
+      - 'POSTGRES_USER=glassofwateruser'
+      - 'POSTGRES_DB=glassofwaterdb'
+    restart: unless-stopped
+
+  glassofwaterapp:
+    image: 'docker-spring-boot-postgres:latest'
+    container_name: 'glassofwaterapp'
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    depends_on:
+      - glassofwaterdb
+    links:
+      - glassofwaterdb
