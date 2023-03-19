@@ -46,8 +46,21 @@ public class FriendsService {
     public void acceptInvite(Long id) {
         FriendInvite friendInvite = friendInviteRepo.getReferenceById(id);
 
+        if (!friendInvite.getAccepted()) {
+            return;
+        }
+
         friendInvite.setAccepted(true);
         friendInvite.setAcceptanceDate(LocalDate.now());
+
+        User user1 = userRepo.findById(friendInvite.getReceiver().getId()).get();
+        User user2 = userRepo.findById(friendInvite.getInitiator().getId()).get();
+
+        user1.getFriends().add(user2);
+        user2.getFriends().add(user1);
+
+        userRepo.save(user1);
+        userRepo.save(user2);
 
         friendInviteRepo.save(friendInvite);
     }
@@ -62,4 +75,7 @@ public class FriendsService {
         return user.getUsersSubscriptions();
     }
 
+    public List<User> getFriends(Long userId) {
+        return userRepo.findById(userId).get().getFriends();
+    }
 }

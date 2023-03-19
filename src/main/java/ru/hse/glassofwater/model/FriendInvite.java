@@ -12,7 +12,6 @@ public class FriendInvite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     // Тот, кто оправил заявку в друзья

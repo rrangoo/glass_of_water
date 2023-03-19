@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.glassofwater.dto.FriendInviteDto;
 import ru.hse.glassofwater.model.FriendInvite;
+import ru.hse.glassofwater.model.User;
 import ru.hse.glassofwater.service.FriendsService;
 
 import java.util.List;
@@ -42,4 +43,8 @@ public class FriendsController {
         return ResponseEntity.ok().body(friendsService.getInitiationsByUserId(userId));
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<List<User>> getFriends(@PathVariable Long id) {
+        return ResponseEntity.ok().body(friendsService.getFriends(id));
+    }
 }
