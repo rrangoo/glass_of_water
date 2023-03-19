@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  api_service:
+    image: 'glassofwaterapp:latest'
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql_db
+    links:
+      - postgresql_db:postgresql_db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql_db:5432/glassofwaterdb
+      SPRING_DATASOURCE_USERNAME: glassofwateruser
+      SPRING_DATASOURCE_PASSWORD: glassofwaterpassword
+  postgresql_db:
+    image: 'postgres:15-alpine3.17'
+    volumes:
+      - postgresql_db:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: glassofwateruser
+      POSTGRES_PASSWORD: glassofwaterpassword
+
+volumes:
+  postgresql_db:
