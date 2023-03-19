@@ -5,4 +5,6 @@ import ru.hse.glassofwater.model.User;
 
 public interface UserRepo extends JpaRepository<User, Long> {
     User findByEmail(String email);
+
+    User findByUsername(String Username);
 }

@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost/glassofwaterdb
+    username: glassofwateruser
+    password: glassofwaterpassword
+  jpa:
+    generate-ddl: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: player02145@gmail.com
+    password: ahpujxcpiehoarej
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true

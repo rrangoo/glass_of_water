@@ -1,4 +1,4 @@
-package ru.hse.glassofwater.model;
+package ru.hse.glassofwater.dto;
 
 import lombok.Data;
 

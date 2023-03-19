@@ -1,9 +1,11 @@
 package ru.hse.glassofwater.model;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,4 +21,23 @@ public class User {
 
     @OneToMany
     private List<Trip> trips;
+
+    // Отправленные заявки пользователя
+    @JsonIgnore
+    @OneToMany(mappedBy = "initiator")
+    private List<FriendInvite> usersSubscriptions;
+
+    // Приглашения в друзья
+    @JsonIgnore
+    @OneToMany(mappedBy = "receiver")
+    private List<FriendInvite> usersInvitations;
+
+    @JsonIgnore
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "friends",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+    private List<User> friends;
 }

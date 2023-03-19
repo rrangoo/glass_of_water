@@ -3,7 +3,7 @@ package ru.hse.glassofwater.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.glassofwater.model.Email;
+import ru.hse.glassofwater.dto.Email;
 import ru.hse.glassofwater.model.User;
 import ru.hse.glassofwater.model.UserInfo;
 import ru.hse.glassofwater.service.AuthService;
@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("auth")
 public class AuthController {
 
+    // TODO: выбрасывать исключение, если у пользователя неунекальный ник
     AuthService authService;
 
     public AuthController(@Autowired AuthService authService) {
