@@ -46,7 +46,7 @@ public class FriendsService {
     public void acceptInvite(Long id) {
         FriendInvite friendInvite = friendInviteRepo.getReferenceById(id);
 
-        if (!friendInvite.getAccepted()) {
+        if (friendInvite.getAccepted()) {
             return;
         }
 
