@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost/bblex
-    username: bblex
-    password: bblex
+    url: jdbc:postgresql://localhost/glassofwaterdb
+    username: glassofwateruser
+    password: glassofwaterpassword
   jpa:
     generate-ddl: true
   mail:
