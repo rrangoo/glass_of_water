@@ -84,6 +84,6 @@ public class FriendsService {
     public List<User> getNotFriends(Long userId) {
         User currentUser = userRepo.findById(userId).get();
         List<User> allUsers = userRepo.findAll();
-        return allUsers.stream().filter(user -> !currentUser.getFriends().contains(user)).collect(Collectors.toList());
+        return allUsers.stream().filter(user -> !currentUser.getFriends().contains(user) && !user.equals(currentUser)).collect(Collectors.toList());
     }
 }
