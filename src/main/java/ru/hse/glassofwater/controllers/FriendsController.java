@@ -47,4 +47,9 @@ public class FriendsController {
     public ResponseEntity<List<User>> getFriends(@PathVariable Long id) {
         return ResponseEntity.ok().body(friendsService.getFriends(id));
     }
+
+    @GetMapping("{userId}/not_friends")
+    public ResponseEntity<List<User>> getNotFriends(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(friendsService.getNotFriends(userId));
+    }
 }

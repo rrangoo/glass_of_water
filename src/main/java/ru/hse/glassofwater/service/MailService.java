@@ -14,8 +14,8 @@ public class MailService {
     public boolean sendMessage(String email, String code){
         SimpleMailMessage simpleMail = new SimpleMailMessage();
         simpleMail.setTo(email);
-        simpleMail.setSubject("Glass of water code.");
-        simpleMail.setText("Your code: " + code);
+        simpleMail.setSubject("Glass of water code");
+        simpleMail.setText(String.format("Hello, driver!\n\nYour login code: %s\n\nBest regards,\nGlass Of Water team.", code));
 
         try {
             mailSender.send(simpleMail);

@@ -67,7 +67,8 @@ public class FriendsService {
 
     public List<FriendInvite> getInvitesByUserId(Long userId) {
         User user = userRepo.findById(userId).get();
-        return user.getUsersInvitations();
+        // TODO: в будущем возможно нужно будет возвращать еще инвайты в статусе accepted == trye
+        return user.getUsersInvitations().stream().filter(invite -> !invite.getAccepted()).toList();
     }
 
     public List<FriendInvite> getInitiationsByUserId(Long userId) {
@@ -77,5 +78,11 @@ public class FriendsService {
 
     public List<User> getFriends(Long userId) {
         return userRepo.findById(userId).get().getFriends();
+    }
+
+    public List<User> getNotFriends(Long userId) {
+        User currentUser = userRepo.findById(userId).get();
+        List<User> allUsers = currentUser.getFriends();
+        return allUsers.stream().filter(user -> !currentUser.getFriends().contains(user)).toList();
     }
 }
