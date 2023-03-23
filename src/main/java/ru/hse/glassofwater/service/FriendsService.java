@@ -10,6 +10,7 @@ import ru.hse.glassofwater.repository.UserRepo;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FriendsService {
@@ -68,7 +69,7 @@ public class FriendsService {
     public List<FriendInvite> getInvitesByUserId(Long userId) {
         User user = userRepo.findById(userId).get();
         // TODO: в будущем возможно нужно будет возвращать еще инвайты в статусе accepted == trye
-        return user.getUsersInvitations().stream().filter(invite -> !invite.getAccepted()).toList();
+        return user.getUsersInvitations().stream().filter(invite -> !invite.getAccepted()).collect(Collectors.toList());
     }
 
     public List<FriendInvite> getInitiationsByUserId(Long userId) {
@@ -83,6 +84,6 @@ public class FriendsService {
     public List<User> getNotFriends(Long userId) {
         User currentUser = userRepo.findById(userId).get();
         List<User> allUsers = currentUser.getFriends();
-        return allUsers.stream().filter(user -> !currentUser.getFriends().contains(user)).toList();
+        return allUsers.stream().filter(user -> !currentUser.getFriends().contains(user)).collect(Collectors.toList());
     }
 }
