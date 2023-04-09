@@ -20,6 +20,6 @@ public class Trip {
     private Integer averageSpeed;
     private String startTime;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<LatModel> latlen;
 }

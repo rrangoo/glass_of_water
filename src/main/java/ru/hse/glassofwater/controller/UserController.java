@@ -3,10 +3,13 @@ package ru.hse.glassofwater.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.glassofwater.dto.TripDto;
+import ru.hse.glassofwater.model.LatModel;
 import ru.hse.glassofwater.model.Trip;
 import ru.hse.glassofwater.model.User;
+import ru.hse.glassofwater.repository.LatlenRepo;
 import ru.hse.glassofwater.repository.TripRepo;
 import ru.hse.glassofwater.repository.UserRepo;
+import ru.hse.glassofwater.util.TripMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +19,13 @@ import java.util.List;
 public class UserController {
     private final UserRepo userRepo;
     private final TripRepo tripRepo;
+    private final LatlenRepo latlenRepo;
 
     @Autowired
-    public UserController(UserRepo userRepo, TripRepo tripRepo) {
+    public UserController(UserRepo userRepo, TripRepo tripRepo, LatlenRepo latlenRepo) {
         this.userRepo = userRepo;
         this.tripRepo = tripRepo;
+        this.latlenRepo = latlenRepo;
     }
 
     @GetMapping("{id}")
@@ -29,22 +34,29 @@ public class UserController {
     }
 
     @GetMapping("{id}/trips")
-    public List<Trip> getTrips(@PathVariable("id") User user) {
-        return user.getTrips();
+    public List<TripDto> getTrips(@PathVariable("id") User user) {
+        List<TripDto> result = new ArrayList<>();
+        List<Trip> trips = user.getTrips();
+
+        for (Trip trip : trips) {
+            result.add(TripMapper.mapTripDto(trip));
+        }
+
+        return result;
     }
 
     @GetMapping("{id}/trips/{tripId}")
-    public Trip getTrip(@PathVariable("id") User user,
+    public TripDto getTrip(@PathVariable("id") User user,
                         @PathVariable("tripId") Trip trip) {
-        return trip;
+        return TripMapper.mapTripDto(trip);
     }
 
     @PostMapping("{id}/trips")
-    public void createTrip(@PathVariable("id") User user, @RequestBody TripDto trip) {
-//        user.getTrips().add(trip);
-//        tripRepo.save(trip);
-//        userRepo.save(user);
-        System.out.println(trip);
+    public void createTrip(@PathVariable("id") User user, @RequestBody TripDto tripDto) {
+        Trip trip = TripMapper.mapTrip(tripDto);
+        user.getTrips().add(trip);
+        tripRepo.save(trip);
+        userRepo.save(user);
     }
 
     @DeleteMapping("{id}/trips")

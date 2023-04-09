@@ -5,6 +5,4 @@ import ru.hse.glassofwater.model.Trip;
 
 public interface TripRepo extends CrudRepository<Trip, Long> {
 
-//    @Override
-//    void deleteById(Long id);
 }

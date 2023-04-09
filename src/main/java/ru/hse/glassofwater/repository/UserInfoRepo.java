@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface UserInfoRepo extends CrudRepository<UserInfo, Long> {
     UserInfo getByEmail(String email);
-//    List<UserInfo> findAll();
 }
