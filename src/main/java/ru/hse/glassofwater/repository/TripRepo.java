@@ -1,10 +1,10 @@
 package ru.hse.glassofwater.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import ru.hse.glassofwater.model.Trip;
 
-public interface TripRepo extends JpaRepository<Trip, Long> {
+public interface TripRepo extends CrudRepository<Trip, Long> {
 
-    @Override
-    void deleteById(Long id);
+//    @Override
+//    void deleteById(Long id);
 }

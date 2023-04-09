@@ -1,8 +1,11 @@
 package ru.hse.glassofwater.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import ru.hse.glassofwater.model.UserInfo;
 
-public interface UserInfoRepo extends JpaRepository<UserInfo, Long> {
+import java.util.List;
+
+public interface UserInfoRepo extends CrudRepository<UserInfo, Long> {
     UserInfo getByEmail(String email);
+//    List<UserInfo> findAll();
 }

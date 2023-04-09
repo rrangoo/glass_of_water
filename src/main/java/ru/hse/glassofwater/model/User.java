@@ -18,6 +18,7 @@ public class User {
     private String username;
     private String email;
     private Integer rate;
+    private String level;
 
     @OneToMany
     private List<Trip> trips;
@@ -41,3 +42,4 @@ public class User {
     )
     private List<User> friends;
 }
+

@@ -1,4 +1,4 @@
-package ru.hse.glassofwater.controllers;
+package ru.hse.glassofwater.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

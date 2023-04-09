@@ -1,5 +1,6 @@
 package ru.hse.glassofwater.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hse.glassofwater.model.User;
@@ -15,15 +16,13 @@ import java.util.List;
 import java.util.Random;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
-    @Autowired
-    UserInfoRepo userInfoRepo;
+    private final UserInfoRepo userInfoRepo;
 
-    @Autowired
-    UserRepo userRepo;
+    private final UserRepo userRepo;
 
-    @Autowired
-    MailService mailService;
+    private final MailService mailService;
 
 
     /**
@@ -75,14 +74,14 @@ public class AuthService {
             return new Pair<>(AuthStatus.failed, null);
         }
     }
-
-    public List<User> getUsers() {
-        return userRepo.findAll();
-    }
-
-    public List<UserInfo> getUsersInfo() {
-        return userInfoRepo.findAll();
-    }
+//
+//    public List<User> getUsers() {
+//        return userRepo.getAll();
+//    }
+//
+//    public List<UserInfo> getUsersInfo() {
+//        return userInfoRepo.findAll();
+//    }
 
     public void delete(UserInfo userInfo) {
         userInfoRepo.delete(userInfo);

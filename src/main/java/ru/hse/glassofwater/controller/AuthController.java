@@ -1,4 +1,4 @@
-package ru.hse.glassofwater.controllers;
+package ru.hse.glassofwater.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +11,6 @@ import ru.hse.glassofwater.util.AuthStatus;
 import ru.hse.glassofwater.util.Pair;
 import ru.hse.glassofwater.util.Status;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("auth")
 public class AuthController {
@@ -23,16 +21,16 @@ public class AuthController {
     public AuthController(@Autowired AuthService authService) {
         this.authService = authService;
     }
-
-    @GetMapping("users")
-    public List<User> getUsers() {
-        return authService.getUsers();
-    }
-
-    @GetMapping("infos")
-    public List<UserInfo> getUsersInfo() {
-        return authService.getUsersInfo();
-    }
+//
+//    @GetMapping("users")
+//    public List<User> getUsers() {
+//        return authService.getUsers();
+//    }
+//
+//    @GetMapping("infos")
+//    public List<UserInfo> getUsersInfo() {
+//        return authService.getUsersInfo();
+//    }
 
     @PostMapping("/email")
     public ResponseEntity<Status> createUserInfo(@RequestBody Email email) {
