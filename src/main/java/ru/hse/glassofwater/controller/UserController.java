@@ -2,6 +2,7 @@ package ru.hse.glassofwater.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.glassofwater.dto.TripDto;
 import ru.hse.glassofwater.model.Trip;
 import ru.hse.glassofwater.model.User;
 import ru.hse.glassofwater.repository.TripRepo;
@@ -39,10 +40,11 @@ public class UserController {
     }
 
     @PostMapping("{id}/trips")
-    public void createTrip(@PathVariable("id") User user, @RequestBody Trip trip) {
-        user.getTrips().add(trip);
-        tripRepo.save(trip);
-        userRepo.save(user);
+    public void createTrip(@PathVariable("id") User user, @RequestBody TripDto trip) {
+//        user.getTrips().add(trip);
+//        tripRepo.save(trip);
+//        userRepo.save(user);
+        System.out.println(trip);
     }
 
     @DeleteMapping("{id}/trips")
