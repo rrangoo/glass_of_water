@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import ru.hse.glassofwater.dto.TripDto;
 import ru.hse.glassofwater.model.Trip;
 
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class TripMapper implements Mapper<TripDto, Trip> {
@@ -19,7 +21,7 @@ public class TripMapper implements Mapper<TripDto, Trip> {
         tripDto.setAverageSpeed(trip.getAverageSpeed());
         tripDto.setCountOfGlasses(trip.getCountOfGlasses());
         tripDto.setStartTime(trip.getStartTime());
-        tripDto.setLatlen(trip.getLatlen().stream().map(mapper::to).toList());
+        tripDto.setLatlen(trip.getLatlen().stream().map(mapper::to).collect(Collectors.toList()));
 
         return tripDto;
     }
@@ -32,7 +34,7 @@ public class TripMapper implements Mapper<TripDto, Trip> {
                 .startTime(tripDto.getStartTime())
                 .time(tripDto.getStartTime())
                 .rate(tripDto.getRate())
-                .latlen(tripDto.getLatlen().stream().map(mapper::from).toList())
+                .latlen(tripDto.getLatlen().stream().map(mapper::from).collect(Collectors.toList()))
                 .build();
     }
 }
