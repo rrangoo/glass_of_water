@@ -1,13 +1,16 @@
 package ru.hse.glassofwater.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "users_table")
 public class User {
@@ -15,9 +18,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "rate", nullable = false)
     private Integer rate;
+
+    @Column(name = "level", nullable = false)
     private String level;
 
     @OneToMany

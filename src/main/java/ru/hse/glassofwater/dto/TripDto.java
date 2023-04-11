@@ -1,10 +1,7 @@
 package ru.hse.glassofwater.dto;
 
 import lombok.Data;
-import ru.hse.glassofwater.model.LatModel;
-import ru.hse.glassofwater.model.Trip;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

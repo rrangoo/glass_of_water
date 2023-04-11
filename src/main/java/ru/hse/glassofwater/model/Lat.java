@@ -1,13 +1,17 @@
 package ru.hse.glassofwater.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "lat_table")
-public class LatModel {
+public class Lat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

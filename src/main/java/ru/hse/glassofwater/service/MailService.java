@@ -11,17 +11,14 @@ import org.springframework.stereotype.Service;
 public class MailService {
     private final JavaMailSender mailSender;
 
-    public boolean sendMessage(String email, String code){
+    public void sendMessage(String email, String code) throws MailException {
         SimpleMailMessage simpleMail = new SimpleMailMessage();
         simpleMail.setTo(email);
         simpleMail.setSubject("Glass of water code");
         simpleMail.setText(String.format("Hello, driver!\n\nYour login code: %s\n\nBest regards,\nGlass Of Water team.", code));
 
-        try {
-            mailSender.send(simpleMail);
-        } catch (MailException e){
-            return false;
-        }
-        return true;
+        mailSender.send(simpleMail);
     }
+
+
 }

@@ -1,6 +1,6 @@
 package ru.hse.glassofwater.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hse.glassofwater.dto.FriendInviteDto;
 import ru.hse.glassofwater.model.FriendInvite;
@@ -10,25 +10,26 @@ import ru.hse.glassofwater.repository.UserRepo;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class FriendsService {
 
-    private final FriendInviteRepo friendInviteRepo;
+    private final UserService userService;
     private final UserRepo userRepo;
-
-    @Autowired
-    public FriendsService(FriendInviteRepo friendInviteRepo, UserRepo userRepo) {
-        this.friendInviteRepo = friendInviteRepo;
-        this.userRepo = userRepo;
-    }
+    private final FriendInviteRepo friendInviteRepo;
 
     public void addInvite(FriendInviteDto invite) {
-        User receiver = userRepo.findByUsername(invite.getReceiverUsername());
-        User initiator = userRepo.findByUsername(invite.getInitiatorUsername());
-
-        // TODO: обработать, если пользователь уже отправил заявку в друзья
+        User receiver;
+        User initiator;
+        try {
+            receiver = userService.getUserByUsername(invite.getReceiverUsername());
+            initiator = userService.getUserByUsername(invite.getInitiatorUsername());
+        } catch (NoSuchElementException e) {
+            return;
+        }
 
         FriendInvite friendInvite = new FriendInvite();
         friendInvite.setInitiator(initiator);

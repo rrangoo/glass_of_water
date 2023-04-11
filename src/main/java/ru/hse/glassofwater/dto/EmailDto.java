@@ -3,6 +3,6 @@ package ru.hse.glassofwater.dto;
 import lombok.Data;
 
 @Data
-public class Email {
+public class EmailDto {
     private String email;
 }

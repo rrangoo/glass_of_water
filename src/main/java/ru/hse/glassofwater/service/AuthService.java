@@ -1,89 +1,115 @@
 package ru.hse.glassofwater.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
+import ru.hse.glassofwater.model.AuthUserData;
 import ru.hse.glassofwater.model.User;
-import ru.hse.glassofwater.model.UserInfo;
-import ru.hse.glassofwater.repository.UserInfoRepo;
+import ru.hse.glassofwater.repository.AuthUserDataRepo;
 import ru.hse.glassofwater.repository.UserRepo;
 import ru.hse.glassofwater.util.AuthStatus;
 import ru.hse.glassofwater.util.Pair;
 import ru.hse.glassofwater.util.Status;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final UserInfoRepo userInfoRepo;
-
+    private final AuthUserDataRepo authUserDataRepo;
     private final UserRepo userRepo;
-
     private final MailService mailService;
 
+    public Status sendCode(String email) {
+        String code = generateCode();
 
-    /**
-     * @param email Адрес почты пользователя.
-     * @return "success" - если сообщение с кодом удолось отправить на данный адрес.
-     */
-    public Status create(String email) {
-        String code = Integer.toString(new Random().nextInt(9000) + 1000);
-        UserInfo tmp = new UserInfo();
+        try {
+            mailService.sendMessage(email, code);
 
-        tmp.setEmail(email);
-        tmp.setCode(code);
+            AuthUserData authUserData = getAuthUserData(email);
+            authUserData.setCode(code);
 
-        if (mailService.sendMessage(email, code)) {
-            UserInfo currentUserInfo = userInfoRepo.getByEmail(email);
-            if (currentUserInfo != null) {
-                userInfoRepo.delete(currentUserInfo);
-            }
-            userInfoRepo.save(tmp);
-            return new Status("success");
-        } else {
+            authUserDataRepo.save(authUserData);
+
+        } catch (MailException e) {
+            e.printStackTrace();
             return new Status("failed");
+
+        } catch (NoSuchElementException e) {
+            AuthUserData authUserData = AuthUserData.builder()
+                    .code(code)
+                    .email(email)
+                    .build();
+
+            authUserDataRepo.save(authUserData);
         }
+
+        return new Status("success");
     }
 
-    public Pair<AuthStatus, User> confirm(UserInfo userInfo) {
-        UserInfo currentUserInfo = userInfoRepo.getByEmail(userInfo.getEmail());
+    public Pair<AuthStatus, User> confirmCode(AuthUserData inputData) {
+        Pair<AuthStatus, User> result = new Pair<>(AuthStatus.failed, null);
 
-        if (currentUserInfo == null) {
-            return new Pair<>(AuthStatus.failed, null);
+        String email = inputData.getEmail();
+        String code = inputData.getCode();
+
+        AuthUserData authUserData;
+
+        try {
+            authUserData = getAuthUserData(email);
+        } catch (NoSuchElementException e) {
+            return result;
         }
 
-        if (currentUserInfo.getCode().equals(userInfo.getCode())) {
-            User user = userRepo.findByEmail(userInfo.getEmail());
+        if (authUserData.getCode().equals(code)) {
+            User user;
+            do {
+                user = getUser(email);
+            } while (userRepo.findByUsername(user.getUsername()).isPresent());
 
-            if (user == null) {
-                user = new User();
-                user.setEmail(userInfo.getEmail());
-                user.setRate(0);
-                user.setUsername(user.getEmail().split("@")[0]);
-                user.setTrips(new ArrayList<>());
-                userRepo.save(user);
-            }
+            userRepo.save(user);
 
-            userInfoRepo.delete(currentUserInfo);
-
-            return new Pair<>(AuthStatus.success, user);
-        } else {
-            return new Pair<>(AuthStatus.failed, null);
+            authUserDataRepo.delete(authUserData);
+            result = new Pair<>(AuthStatus.success, user);
         }
+        return result;
     }
-//
-//    public List<User> getUsers() {
-//        return userRepo.getAll();
-//    }
-//
-//    public List<UserInfo> getUsersInfo() {
-//        return userInfoRepo.findAll();
-//    }
 
-    public void delete(UserInfo userInfo) {
-        userInfoRepo.delete(userInfo);
+    public void delete(AuthUserData authUserData) {
+        authUserDataRepo.delete(authUserData);
+    }
+
+    private String generateCode() {
+        return Integer.toString(new Random().nextInt(9000) + 1000);
+    }
+
+    private AuthUserData getAuthUserData(String email) throws NoSuchElementException {
+        return authUserDataRepo.findByEmail(email).orElseThrow();
+    }
+
+    private User getUser(String email) {
+        return userRepo.findByEmail(email).orElseGet(() -> User.builder()
+                .trips(new ArrayList<>())
+                .level("beginner")
+                .rate(0)
+                .friends(new ArrayList<>())
+                .username(generateUsername())
+                .email(email)
+                .usersInvitations(new ArrayList<>())
+                .usersSubscriptions(new ArrayList<>())
+                .build());
+    }
+
+    private String generateUsername() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("user-");
+
+        for (int i = 0; i < 5; i++) {
+            stringBuilder.append(new Random().nextInt(10));
+        }
+        return stringBuilder.toString();
     }
 }

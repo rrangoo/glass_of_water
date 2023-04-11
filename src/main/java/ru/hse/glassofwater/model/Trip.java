@@ -1,11 +1,15 @@
 package ru.hse.glassofwater.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "trips_table")
 public class Trip {
@@ -21,5 +25,5 @@ public class Trip {
     private String startTime;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<LatModel> latlen;
+    private List<Lat> latlen;
 }

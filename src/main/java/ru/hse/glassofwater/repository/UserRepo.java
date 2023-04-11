@@ -3,8 +3,10 @@ package ru.hse.glassofwater.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.hse.glassofwater.model.User;
 
-public interface UserRepo extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+import java.util.Optional;
 
-    User findByUsername(String Username);
+public interface UserRepo extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByUsername(String Username);
 }

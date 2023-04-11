@@ -1,55 +1,28 @@
 package ru.hse.glassofwater.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.glassofwater.dto.FriendInviteDto;
 import ru.hse.glassofwater.model.FriendInvite;
 import ru.hse.glassofwater.model.User;
-import ru.hse.glassofwater.service.FriendsService;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("friends")
-public class FriendsController {
+public interface FriendsController {
+    @PostMapping
+    void sendInvite(@RequestBody FriendInviteDto invite);
 
-    private final FriendsService friendsService;
-
-    @Autowired
-    public FriendsController(FriendsService friendsService) {
-        this.friendsService = friendsService;
-    }
-
-    @PostMapping()
-    public ResponseEntity<Void> sendInvite(@RequestBody FriendInviteDto invite) {
-        friendsService.addInvite(invite);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping("invite/{id}")
-    public ResponseEntity<Void> acceptInvite(@PathVariable Long id) {
-        friendsService.acceptInvite(id);
-        return ResponseEntity.ok().build();
-    }
+    @PatchMapping("invite/{inviteId}")
+    void acceptInvite(@PathVariable Long inviteId);
 
     @GetMapping("invite/")
-    public ResponseEntity<List<FriendInvite>> getInvitesByUserId(@RequestParam(name = "user_id") Long userId) {
-        return ResponseEntity.ok().body(friendsService.getInvitesByUserId(userId));
-    }
+    List<FriendInvite> getInvitesByUserId(@RequestParam(name = "user_id") Long userId);
 
     @GetMapping("initiation/")
-    public ResponseEntity<List<FriendInvite>> getInitiationsByUserId(@RequestParam(name = "user_id") Long userId) {
-        return ResponseEntity.ok().body(friendsService.getInitiationsByUserId(userId));
-    }
+    List<FriendInvite> getInitiationsByUserId(@RequestParam(name = "user_id") Long userId);
 
     @GetMapping("{id}")
-    public ResponseEntity<List<User>> getFriends(@PathVariable Long id) {
-        return ResponseEntity.ok().body(friendsService.getFriends(id));
-    }
+    List<User> getFriends(@PathVariable Long id);
 
     @GetMapping("{userId}/not_friends")
-    public ResponseEntity<List<User>> getNotFriends(@PathVariable Long userId) {
-        return ResponseEntity.ok().body(friendsService.getNotFriends(userId));
-    }
+    List<User> getNotFriends(@PathVariable Long userId);
 }

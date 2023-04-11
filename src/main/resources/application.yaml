@@ -1,11 +1,6 @@
 spring:
   jpa:
     generate-ddl: true
-#  datasource:
-#    url: jdbc:postgresql://localhost/bblex
-#    username: bblex
-#    password: bblex
-#    driver-class-name: org.postgresql.Driver
   mail:
     host: smtp.gmail.com
     port: 587
