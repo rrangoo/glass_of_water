@@ -7,6 +7,7 @@ import ru.hse.glassofwater.mapper.Mapper;
 import ru.hse.glassofwater.model.Trip;
 import ru.hse.glassofwater.model.User;
 import ru.hse.glassofwater.repository.TripRepo;
+import ru.hse.glassofwater.repository.UserRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TripService {
     private final TripRepo tripRepo;
+    private final UserRepo userRepo;
     private final UserService userService;
     private final Mapper<TripDto, Trip> mapper;
 
@@ -34,7 +36,7 @@ public class TripService {
         }
     }
 
-    public TripDto getTrip(Long tripId){
+    public TripDto getTrip(Long tripId) {
         try {
             return mapper.to(getTripById(tripId));
         } catch (NoSuchElementException e) {
@@ -48,7 +50,7 @@ public class TripService {
             Trip trip = mapper.from(tripDto);
             user.getTrips().add(trip);
             tripRepo.save(trip);
-            userService.updateUser(userId, user);
+            userRepo.save(user);
         } catch (NoSuchElementException ignored) {
         }
     }
@@ -57,7 +59,7 @@ public class TripService {
         return Optional.ofNullable(userService.getUserById(userId)).orElseThrow();
     }
 
-    private Trip getTripById(Long tripId) throws NoSuchElementException{
+    private Trip getTripById(Long tripId) throws NoSuchElementException {
         return tripRepo.findById(tripId).orElseThrow();
     }
 }

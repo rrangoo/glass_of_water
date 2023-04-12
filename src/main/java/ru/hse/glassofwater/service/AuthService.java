@@ -65,10 +65,14 @@ public class AuthService {
 
         if (authUserData.getCode().equals(code)) {
             User user;
-            do {
-                user = getUser(email);
-            } while (userRepo.findByUsername(user.getUsername()).isPresent());
 
+            if (userRepo.findByEmail(email).isPresent()) {
+                user = userRepo.findByEmail(email).get();
+            } else {
+                do {
+                    user = getUser(email);
+                } while (userRepo.findByUsername(user.getUsername()).isPresent());
+            }
             userRepo.save(user);
 
             authUserDataRepo.delete(authUserData);
@@ -90,7 +94,7 @@ public class AuthService {
     }
 
     private User getUser(String email) {
-        return userRepo.findByEmail(email).orElseGet(() -> User.builder()
+        return User.builder()
                 .trips(new ArrayList<>())
                 .level("beginner")
                 .rate(0)
@@ -99,7 +103,7 @@ public class AuthService {
                 .email(email)
                 .usersInvitations(new ArrayList<>())
                 .usersSubscriptions(new ArrayList<>())
-                .build());
+                .build();
     }
 
     private String generateUsername() {
